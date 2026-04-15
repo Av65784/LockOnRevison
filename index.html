@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Simple dashboard web app compatible with GitHub Pages."
+    />
+    <title>Duolingo-Style Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <nav class="navbar">
+        <div class="logo-group">
+          <div class="logo-mark" aria-hidden="true">L</div>
+          <div>
+            <p class="eyebrow">Learning Hub</p>
+            <h1>LockOn Learn</h1>
+          </div>
+        </div>
+
+        <div class="nav-stats" aria-label="Account stats">
+          <div class="chip">
+            <span class="chip-label">Energy</span>
+            <strong id="energyChipValue">0 XP</strong>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Streak</span>
+            <strong id="streakChipValue">0 days</strong>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Daily Usage</span>
+            <strong id="usageChipValue">0 min</strong>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <span id="authStatus" class="muted auth-status">Not signed in</span>
+          <button id="googleLoginBtn" class="btn btn-primary" type="button">
+            Login with Google
+          </button>
+        </div>
+      </nav>
+
+      <main class="dashboard app-layout">
+        <aside class="sidebar card">
+          <button class="sidebar-link active" data-page="dashboard" type="button">
+            <span class="sidebar-icon" aria-hidden="true">🏠</span>
+            <span>Dashboard</span>
+          </button>
+          <button class="sidebar-link" data-page="revision" type="button">
+            <span class="sidebar-icon" aria-hidden="true">📘</span>
+            <span>Revision</span>
+          </button>
+          <button class="sidebar-link" data-page="forge" type="button">
+            <span class="sidebar-icon" aria-hidden="true">🔨</span>
+            <span>Forge</span>
+          </button>
+          <button class="sidebar-link" data-page="pro" type="button">
+            <span class="sidebar-icon" aria-hidden="true">👑</span>
+            <span>Pro</span>
+          </button>
+        </aside>
+
+        <div class="page-content">
+          <section id="dashboard-section" class="page-section">
+            <div class="page-grid">
+              <div class="page-main">
+                <header class="dashboard-head">
+                  <div>
+                    <p class="muted">Welcome back, Learner</p>
+                    <h2>Continue your journey today</h2>
+                  </div>
+                </header>
+
+                <article class="card continue-card">
+                  <p class="eyebrow green">Continue Learning</p>
+                  <h3>Pick up where you left off</h3>
+                  <p class="muted">
+                    Continue your latest track, review weak areas, and grow your XP
+                    with each completed quiz.
+                  </p>
+                  <button class="btn btn-primary" type="button" onclick="showPage('forge')">
+                    Resume in Forge
+                  </button>
+                </article>
+
+                <section class="stats-grid" aria-label="Main stats">
+                  <article class="card stat-card">
+                    <p class="muted">Energy (Unlimited XP)</p>
+                    <h3 id="energyCardValue">0 XP</h3>
+                    <p class="card-note">Gain XP from quizzes and revision wins.</p>
+                  </article>
+                  <article class="card stat-card">
+                    <p class="muted">Streak</p>
+                    <h3 id="streakCardValue">0 Days</h3>
+                    <p class="card-note">Stay active daily to keep momentum.</p>
+                  </article>
+                  <article class="card stat-card">
+                    <p class="muted">Daily Usage</p>
+                    <h3 id="usageCardValue">0 Min</h3>
+                    <p class="card-note">Tracked from real session activity.</p>
+                  </article>
+                </section>
+
+                <section class="main-grid">
+                  <article class="card subjects-card">
+                    <div class="section-heading">
+                      <h3>Subjects</h3>
+                      <span class="muted">Your learning tracks</span>
+                    </div>
+                    <form id="subjectForm" class="subject-form">
+                      <input
+                        id="subjectNameInput"
+                        class="subject-input"
+                        type="text"
+                        placeholder="Create new subject"
+                        maxlength="60"
+                        required
+                      />
+                      <button class="btn btn-primary" type="submit">Add Subject</button>
+                    </form>
+                    <div id="subjectList" class="subject-list"></div>
+                    <p id="subjectHint" class="muted subject-hint">
+                      Sign in to create and manage subjects.
+                    </p>
+                  </article>
+
+                  <article class="card units-card">
+                    <div class="section-heading">
+                      <h3 id="unitsTitle">Units</h3>
+                      <span class="muted">Locked/Unlocked progression</span>
+                    </div>
+                    <div id="unitList" class="unit-list"></div>
+                    <p id="unitHint" class="muted">Select a subject to view units.</p>
+                  </article>
+                </section>
+              </div>
+
+              <aside class="page-side">
+                <article class="card guidance-card">
+                  <p class="eyebrow">Today&apos;s Goal</p>
+                  <h4 id="todayGoalText">Complete one quiz and one revision set</h4>
+                  <p class="muted">
+                    Small daily progress compounds into stronger streaks and faster
+                    mastery.
+                  </p>
+                </article>
+                <article class="card guidance-card">
+                  <p class="eyebrow">Focus Topic</p>
+                  <h4 id="focusTopicText">No weak topic yet</h4>
+                  <p class="muted">
+                    Focus topic updates from your weakest quiz performance area.
+                  </p>
+                </article>
+                <article class="card guidance-card">
+                  <p class="eyebrow">Guided Flow</p>
+                  <p class="muted">
+                    Start in Forge, practice in Revision, then return here to track
+                    XP, streak, and daily usage.
+                  </p>
+                </article>
+              </aside>
+            </div>
+          </section>
+
+          <section id="revision-section" class="page-section hidden">
+            <div class="page-grid">
+              <div class="page-main">
+                <article class="card">
+                  <div class="section-heading">
+                    <h3>Previously Wrong Questions</h3>
+                    <span class="muted">Quiz-style targeted revision</span>
+                  </div>
+                  <div id="wrongQuestionList" class="quiz-container"></div>
+                  <button id="submitRevisionBtn" class="btn btn-primary" type="button">
+                    Submit Revision Quiz
+                  </button>
+                  <p id="revisionHint" class="muted">No wrong questions yet.</p>
+                </article>
+              </div>
+
+              <aside class="page-side">
+                <article class="card">
+                  <div class="section-heading">
+                    <h3>Weak Topics</h3>
+                    <span class="muted">Tracked from quiz attempts</span>
+                  </div>
+                  <div id="weakTopicsList" class="weak-topics-list"></div>
+                </article>
+                <article class="card guidance-card">
+                  <p class="eyebrow">Revision Tip</p>
+                  <p class="muted">
+                    Prioritize topics with the highest weak count and revisit them
+                    before starting new units.
+                  </p>
+                </article>
+              </aside>
+            </div>
+          </section>
+
+          <section id="forge-section" class="page-section hidden">
+            <div class="page-grid">
+              <div class="page-main">
+                <article class="card ai-learning-card">
+                  <div class="section-heading">
+                    <h3>Forge Learning Content</h3>
+                    <span class="muted">Upload notes and generate lessons</span>
+                  </div>
+
+                  <form id="notesForm" class="notes-form">
+                    <input
+                      id="notesFileInput"
+                      class="subject-input"
+                      type="file"
+                      accept=".txt,.md,.pdf,.doc,.docx"
+                      required
+                    />
+                    <button id="generateAiBtn" class="btn btn-primary" type="submit">
+                      Generate Subjects, Units & Lessons
+                    </button>
+                  </form>
+                  <p id="notesHint" class="muted">
+                    Upload notes between 10MB and 20MB for best results.
+                  </p>
+
+                  <div class="adaptive-row">
+                    <span>Adaptive Difficulty:</span>
+                    <strong id="difficultyBadge" class="state-pill state-unlocked"
+                      >Beginner</strong
+                    >
+                  </div>
+
+                  <div id="generatedUnits" class="unit-list"></div>
+                  <div id="lessonContainer" class="lesson-container"></div>
+                  <div id="quizContainer" class="quiz-container"></div>
+                  <button id="submitQuizBtn" class="btn btn-primary" type="button">
+                    Submit Quiz
+                  </button>
+                  <p id="quizResult" class="muted"></p>
+                </article>
+              </div>
+
+              <aside class="page-side">
+                <article class="card chat-card">
+                  <div class="section-heading">
+                    <h3>AI Chat</h3>
+                    <span class="muted">Placeholder responses</span>
+                  </div>
+                  <div id="chatMessages" class="chat-messages"></div>
+                  <form id="chatForm" class="chat-form">
+                    <input
+                      id="chatInput"
+                      class="subject-input"
+                      type="text"
+                      placeholder="Ask a question about your learning plan..."
+                      required
+                    />
+                    <button class="btn btn-primary" type="submit">Send</button>
+                  </form>
+                </article>
+                <article class="card guidance-card">
+                  <p class="eyebrow">Forge Tip</p>
+                  <p class="muted">
+                    Generate once, then iterate using chat prompts for clearer units
+                    and better quiz quality.
+                  </p>
+                </article>
+              </aside>
+            </div>
+          </section>
+
+          <section id="pro-section" class="page-section hidden">
+            <div class="page-grid">
+              <div class="page-main">
+                <article class="card monetization-card">
+                  <p class="eyebrow green">Monetization</p>
+                  <h3>Upgrade to Pro</h3>
+                  <p class="muted">₹20/month</p>
+
+                  <div class="pro-compare-wrap">
+                    <table class="pro-compare-table">
+                      <thead>
+                        <tr>
+                          <th>Feature</th>
+                          <th>Free</th>
+                          <th>Pro</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>AI Usage</td>
+                          <td>Limited AI usage</td>
+                          <td>More AI usage</td>
+                        </tr>
+                        <tr>
+                          <td>Upload Limit</td>
+                          <td>Lower upload limit</td>
+                          <td>Higher upload limit</td>
+                        </tr>
+                        <tr>
+                          <td>Insights</td>
+                          <td>Basic tracking</td>
+                          <td>Advanced analytics</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <button id="razorpayBtn" class="btn btn-primary" type="button">
+                    Pay ₹20 / month
+                  </button>
+                  <p id="planStatus" class="muted">Current plan: free</p>
+                </article>
+              </div>
+
+              <aside class="page-side">
+                <article class="card guidance-card">
+                  <p class="eyebrow">Why Pro</p>
+                  <p class="muted">
+                    Designed for frequent learners who want deeper AI usage and more
+                    analytics across their study workflow.
+                  </p>
+                </article>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
